@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using BitStreams;
 
 namespace HuffmanEncodeLibrary {
@@ -98,12 +99,12 @@ namespace HuffmanEncodeLibrary {
         }
 
         public byte[] Encode(byte[] data) {
-            var bitStream = new BitStream(new byte[] { });
+            var bitStream = new BitStream(new byte[] { }) {AutoIncreaseStream = true};
 
             foreach (var b in data) {
                 var node = _codeTable[b];
 
-                bitStream.ChangeLength(bitStream.Length + node.Code.Count);
+                //bitStream.ChangeLength(bitStream.Length + node.Code.Count);
                 bitStream.WriteBits(node.Code);
             }
 
