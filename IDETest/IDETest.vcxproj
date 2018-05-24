@@ -32,7 +32,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -115,6 +115,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\ide_const.h" />
+    <ClInclude Include="..\src\ide_huffman.h" />
+    <ClInclude Include="..\src\ide_main.h" />
+    <ClInclude Include="..\src\ide_net.h" />
+    <ClInclude Include="..\src\ide_netbasic.h" />
+    <ClInclude Include="..\src\ide_svinfo.h" />
+    <ClInclude Include="..\src\ide_threads.h" />
+    <ClInclude Include="..\src\ide_version.h" />
+    <ClInclude Include="..\src\ide_zdmaster.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\ide_dll.cpp" />
+    <ClCompile Include="..\src\ide_huffman.cpp" />
+    <ClCompile Include="..\src\ide_main.cpp" />
+    <ClCompile Include="..\src\ide_netbasic.cpp" />
+    <ClCompile Include="..\src\ide_svinfo.cpp" />
+    <ClCompile Include="..\src\ide_threads.cpp" />
+    <ClCompile Include="..\src\ide_zdmaster.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
