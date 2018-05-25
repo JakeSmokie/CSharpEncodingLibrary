@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace HuffmanEncodeLibrary {
+namespace EncodeLibrary.Huffman {
     public class HuffmanTreeBuilder {
         private class Node {
             public int Amount;

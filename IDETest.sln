@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSIDETest", "CSIDETest\CSID
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{0CB8B54E-CACB-4BD6-9084-0BB9BB436716}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HuffmanEncodeLibrary", "HuffmanEncodeLibrary\HuffmanEncodeLibrary.csproj", "{36A3BDD5-381F-40E0-A09C-0EDAE16A9392}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EncodeLibrary", "HuffmanEncodeLibrary\EncodeLibrary.csproj", "{36A3BDD5-381F-40E0-A09C-0EDAE16A9392}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

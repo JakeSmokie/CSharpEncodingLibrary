@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CSIDETest\CSIDETest.csproj" />
-    <ProjectReference Include="..\HuffmanEncodeLibrary\HuffmanEncodeLibrary.csproj" />
+    <ProjectReference Include="..\HuffmanEncodeLibrary\EncodeLibrary.csproj" />
   </ItemGroup>
 
 </Project>

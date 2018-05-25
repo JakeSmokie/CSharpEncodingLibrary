@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Text;
-using HuffmanEncodeLibrary;
+using EncodeLibrary;
+using EncodeLibrary.Huffman;
 
 namespace CSIDETest
 {

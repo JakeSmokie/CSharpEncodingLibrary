@@ -1,9 +1,25 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Text;
 using BitStreams;
 
-namespace HuffmanEncodeLibrary {
-    public class HuffmanCodec {
+namespace EncodeLibrary.Huffman {
+    public class HuffmanCodec : ICodec {
+        private class HuffmanNode {
+            public HuffmanNode[] Childs;
+            public List<Bit> Code;
+            public int Value;
+
+            public override string ToString() {
+                var stringBuilder = new StringBuilder();
+
+                foreach (var bit in Code) {
+                    stringBuilder.Append(bit.AsInt());
+                }
+
+                return stringBuilder.Append(" ").Append((char) Value).ToString();
+            }
+        }
+
         public static readonly byte[] SkulltagCompatibleHuffmanTree = {
             0, 0, 0, 1, 128, 0, 0, 0, 3, 38, 34, 2, 1, 80, 3, 110,
             144, 67, 0, 2, 1, 74, 3, 243, 142, 37, 2, 3, 124, 58, 182, 0,
@@ -41,22 +57,53 @@ namespace HuffmanEncodeLibrary {
 
         private readonly byte[] _huffmanTree;
         private readonly HuffmanNode[] _codeTable;
-        private HuffmanNode _root;
+        private readonly HuffmanNode _root;
 
         public HuffmanCodec(byte[] huffmanTree) {
             _codeTable = new HuffmanNode[256];
             _huffmanTree = huffmanTree;
 
-            CreateCodeTable();
-        }
-
-        private void CreateCodeTable() {
             _root = new HuffmanNode {
                 Value = -1,
                 Code = new List<Bit>()
             };
 
             BuildTree(_root, 0);
+        }
+
+        public byte[] Encode(byte[] data) {
+            var bitStream = new BitStream(new byte[] { }) {AutoIncreaseStream = true};
+
+            foreach (var b in data) {
+                var node = _codeTable[b];
+
+                bitStream.WriteBits(node.Code);
+            }
+
+            return bitStream.GetStreamData();
+        }
+
+        public byte[] Decode(byte[] data) {
+            var node = _root;
+            var bitStream = new BitStream(data);
+            var output = new List<byte>();
+
+            long symbolsRead = 0;
+
+            while (symbolsRead < bitStream.Length) {
+                var index = bitStream.ReadBit().AsInt();
+                symbolsRead += 1;
+
+                node = node.Childs[index];
+
+                if (node.Childs != null)
+                    continue;
+
+                output.Add((byte) (node.Value & 0xFF));
+                node = _root;
+            }
+
+            return output.ToArray();
         }
 
         private int BuildTree(HuffmanNode node, int index) {
@@ -96,42 +143,6 @@ namespace HuffmanEncodeLibrary {
             }
 
             return index;
-        }
-
-        public byte[] Encode(byte[] data) {
-            var bitStream = new BitStream(new byte[] { }) {AutoIncreaseStream = true};
-
-            foreach (var b in data) {
-                var node = _codeTable[b];
-
-                //bitStream.ChangeLength(bitStream.Length + node.Code.Count);
-                bitStream.WriteBits(node.Code);
-            }
-
-            return bitStream.GetStreamData();
-        }
-
-        public byte[] Decode(byte[] data) {
-            var node = _root;
-            var bitStream = new BitStream(data);
-            var output = new List<byte>();
-
-            long symbolsRead = 0;
-
-            while (symbolsRead < bitStream.Length) {
-                var index = bitStream.ReadBit().AsInt();
-                symbolsRead += 1;
-
-                node = node.Childs[index];
-
-                if (node.Childs != null)
-                    continue;
-
-                output.Add((byte) (node.Value & 0xFF));
-                node = _root;
-            }
-
-            return output.ToArray();
         }
     }
 }
