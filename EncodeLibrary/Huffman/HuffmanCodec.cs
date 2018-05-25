@@ -71,8 +71,10 @@ namespace EncodeLibrary.Huffman {
             BuildTree(_root, 0);
         }
 
+        /// <returns>Encodes data in format: { padding amount, code... } </returns>
         public byte[] Encode(byte[] data) {
             var bitStream = new BitStream(new byte[] { }) {AutoIncreaseStream = true};
+            bitStream.WriteByte(0);
 
             foreach (var b in data) {
                 var node = _codeTable[b];
@@ -80,7 +82,10 @@ namespace EncodeLibrary.Huffman {
                 bitStream.WriteBits(node.Code);
             }
 
-            return bitStream.GetStreamData();
+            var output = bitStream.GetStreamData();
+            output[0] = (byte) (8 - bitStream.BitPosition);
+
+            return output;
         }
 
         public byte[] Decode(byte[] data) {
@@ -88,9 +93,13 @@ namespace EncodeLibrary.Huffman {
             var bitStream = new BitStream(data);
             var output = new List<byte>();
 
+            var padding = bitStream.ReadByte();
+
+            // read all bits from array except last `padding` bits
+            var bitsToRead = (bitStream.Length - 1) * 8 - padding;
             long symbolsRead = 0;
 
-            while (symbolsRead < bitStream.Length) {
+            while (symbolsRead < bitsToRead) {
                 var index = bitStream.ReadBit().AsInt();
                 symbolsRead += 1;
 

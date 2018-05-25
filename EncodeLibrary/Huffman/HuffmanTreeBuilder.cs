@@ -2,6 +2,39 @@
 using System.Linq;
 
 namespace EncodeLibrary.Huffman {
+    /// <summary>
+    /// Creates table in specific format:
+    /// 
+    ///     ^ - node, l - left child, r - right child
+    ///     { ^, ^l, ^r, ^ll, ^lr, ^rl, ^rr, ... }
+    /// 
+    ///     0 - non-leaf node whose left and right childs are non-leaf nodes
+    /// 
+    ///     1 - non-leaf node whose left child is leaf node
+    ///     * - some byte to decode [exactly _left_ child leaf node]
+    /// 
+    ///     2 - non-leaf node whose right child is leaf node
+    ///     * - some byte to decode [exactly _right_ child leaf node]
+    /// 
+    ///     3 - non-leaf node whose left and right childs are leaf nodes
+    ///     * - some byte to decode [exactly _left_ child leaf node]
+    ///     * - some byte to decode [exactly _right_ child leaf node]
+    ///
+    /// Example:
+    ///
+    ///     This sequence:
+    ///     a = { 2, 1, q, 3, w, e, r } where `q, w, e, r` - some bytes
+    ///
+    ///     Will be interpreted as:
+    ///     a[0]     ^
+    ///             / \
+    ///     a[1]   ^   r a[6]
+    ///           / \
+    ///     a[2] q   ^   a[3]
+    ///             / \
+    ///     a[4]   w   e a[5]
+    /// 
+    /// </summary>
     public class HuffmanTreeBuilder {
         private class Node {
             public int Amount;
@@ -12,40 +45,8 @@ namespace EncodeLibrary.Huffman {
                 return $"{nameof(Amount)}: {Amount}, {nameof(Value)}: {(char?) Value}";
             }
         }
-        /// <summary>
-        /// Create table in specific format:
-        /// 
-        ///     ^ - node, l - left child, r - right child
-        ///     { ^, ^l, ^r, ^ll, ^lr, ^rl, ^rr, ... }
-        /// 
-        ///     0 - non-leaf node whose left and right childs are non-leaf nodes
-        /// 
-        ///     1 - non-leaf node whose left child is leaf node
-        ///     * - some byte to decode [exactly _left_ child leaf node]
-        /// 
-        ///     2 - non-leaf node whose right child is leaf node
-        ///     * - some byte to decode [exactly _right_ child leaf node]
-        /// 
-        ///     3 - non-leaf node whose left and right childs are leaf nodes
-        ///     * - some byte to decode [exactly _left_ child leaf node]
-        ///     * - some byte to decode [exactly _right_ child leaf node]
-        ///
-        /// Example:
-        ///
-        ///     This sequence:
-        ///     a = { 2, 1, q, 3, w, e, r } where `q, w, e, r` - some bytes
-        ///
-        ///     Will be interpreted as:
-        ///     a[0]     ^
-        ///             / \
-        ///     a[1]   ^   r a[6]
-        ///           / \
-        ///     a[2] q   ^   a[3]
-        ///             / \
-        ///     a[4]   w   e a[5]
-        /// 
-        /// </summary>
-        public byte[] CreateTableFromDataset(byte[] data) {
+
+        public byte[] CreateTable(byte[] data) {
             var nodes = CountSymbols(data);
 
             BuildTree(nodes);
