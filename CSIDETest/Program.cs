@@ -6,7 +6,7 @@ using EncodeLibrary.Huffman;
 namespace CSIDETest
 {
     internal class Program {
-        static void Main(string[] args) {
+        private static void Main(string[] args) {
             var fetcher = new MasterServerFetcher();
 
             var poem = File.ReadAllText("poem.txt", Encoding.UTF8);
