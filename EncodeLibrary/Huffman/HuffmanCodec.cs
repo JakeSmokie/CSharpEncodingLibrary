@@ -83,7 +83,7 @@ namespace EncodeLibrary.Huffman {
             }
 
             var output = bitStream.GetStreamData();
-            output[0] = (byte) (8 - bitStream.BitPosition);
+            output[0] = (byte) ((8 - bitStream.BitPosition) % 8);
 
             return output;
         }

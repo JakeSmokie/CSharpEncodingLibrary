@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HuffmanEncodeLibrary\EncodeLibrary.csproj" />
+    <ProjectReference Include="..\EncodeLibrary\EncodeLibrary.csproj" />
   </ItemGroup>
 
 </Project>

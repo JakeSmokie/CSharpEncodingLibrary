@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace EncodeLibrary.Huffman {
+namespace EncodeLibrary.Huffman
+{
     /// <summary>
     /// Creates table in specific format:
     /// 
@@ -48,6 +49,10 @@ namespace EncodeLibrary.Huffman {
 
         public byte[] CreateTable(byte[] data) {
             var nodes = CountSymbols(data);
+
+            if (nodes.Count == 1) {
+                throw new HuffmanTreeBuilderException("Alphabet contained 1 symbol. Cannot build tree.");
+            }
 
             BuildTree(nodes);
             var table = CreateTable(nodes.Last());
