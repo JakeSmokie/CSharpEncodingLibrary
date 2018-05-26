@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace EncodeLibrary.Huffman
-{
+namespace EncodeLibrary.Huffman {
     /// <summary>
     /// Creates table in specific format:
     /// 
@@ -38,7 +38,7 @@ namespace EncodeLibrary.Huffman
     /// </summary>
     public class HuffmanTreeBuilder {
         private class Node {
-            public int Amount;
+            public double Amount;
             public byte? Value;
             public Node[] Childs;
 
@@ -47,6 +47,32 @@ namespace EncodeLibrary.Huffman
             }
         }
 
+        /// <summary>
+        /// Creates table from symbol frequencies
+        /// </summary>
+        public byte[] CreateTable(double[] frequencies) {
+            if (frequencies.Length != 0x100) {
+                throw new HuffmanTreeBuilderException("Each frequency for byte should be expressed");
+            }
+
+            var nodes = MakeNodesFromFrequencies(frequencies);
+            BuildTree(nodes);
+            var table = CreateTable(nodes.Last());
+
+            return table;
+        }
+
+        private ICollection<Node> MakeNodesFromFrequencies(IEnumerable<double> frequencies) {
+            return frequencies.Select((t, i) => new Node {
+                    Value = (byte) i,
+                    Amount = t
+                })
+                .ToList();
+        }
+
+        /// <summary>
+        /// Creates table from some dataset
+        /// </summary>
         public byte[] CreateTable(byte[] data) {
             var nodes = CountSymbols(data);
 
