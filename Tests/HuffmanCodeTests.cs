@@ -60,6 +60,7 @@ namespace Tests {
 
             var builder = new HuffmanTreeBuilder();
             var table = builder.CreateTable(frequencies);
+            var codec = new HuffmanCodec(table);
         }
 
         [Fact]

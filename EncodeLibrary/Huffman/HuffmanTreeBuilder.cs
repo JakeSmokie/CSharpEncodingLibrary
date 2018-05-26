@@ -50,13 +50,13 @@ namespace EncodeLibrary.Huffman {
         /// <summary>
         /// Creates table from symbol frequencies
         /// </summary>
-        public byte[] CreateTable(double[] frequencies) {
+        public byte[] CreateTable(double[] frequencies, bool reverseCodes = false) {
             if (frequencies.Length != 0x100) {
                 throw new HuffmanTreeBuilderException("Each frequency for byte should be expressed");
             }
 
             var nodes = MakeNodesFromFrequencies(frequencies);
-            BuildTree(nodes);
+            BuildTree(nodes, reverseCodes);
             var table = CreateTable(nodes.Last());
 
             return table;
@@ -73,14 +73,14 @@ namespace EncodeLibrary.Huffman {
         /// <summary>
         /// Creates table from some dataset
         /// </summary>
-        public byte[] CreateTable(byte[] data) {
+        public byte[] CreateTable(byte[] data, bool reverseCodes = false) {
             var nodes = CountSymbols(data);
 
             if (nodes.Count == 1) {
                 throw new HuffmanTreeBuilderException("Alphabet contained 1 symbol. Cannot build tree.");
             }
 
-            BuildTree(nodes);
+            BuildTree(nodes, reverseCodes);
             var table = CreateTable(nodes.Last());
 
             return table;
@@ -95,12 +95,14 @@ namespace EncodeLibrary.Huffman {
                 .ToList();
         }
 
-        private static void BuildTree(ICollection<Node> nodes) {
+        private static void BuildTree(ICollection<Node> nodes, bool reverseCodes) {
             for (var i = 0; i < nodes.Count - 1; i += 2) {
                 var leastAmountNodes = nodes.OrderBy(n => n.Amount).Skip(i).Take(2).ToArray();
 
                 nodes.Add(new Node {
-                    Childs = leastAmountNodes,
+                    Childs = reverseCodes ? 
+                        leastAmountNodes.Reverse().ToArray() :
+                        leastAmountNodes,
                     Amount = leastAmountNodes.Sum(n => n.Amount)
                 });
             }
